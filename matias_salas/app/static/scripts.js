@@ -7,6 +7,8 @@ const rutEl = $("#rut");
 const birthEl = $("#birthdate");
 const phoneEl = $("#phone");
 const emailEl = $("#email");
+const nameRegex  = /^[\p{L}\s]+$/u;
+const nameChar   = /^[\p{L}\s]$/u;
 const phoneRegex = /^(\+?56)?\s*0?9\d{8}$/;
 
 function setError(field, msg) {
@@ -24,11 +26,32 @@ function setError(field, msg) {
   }
 }
 
+function fmtDate(d) {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+function todayStr() {
+  return fmtDate(new Date());
+}
+function yesterdayStr() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return fmtDate(d);
+}
+function isTodayOrLaterStr(yyyyMmDd) {
+  return yyyyMmDd >= todayStr();
+}
+
 function validate() {
   let valid = true;
 
   if (!nameEl.value.trim()) {
     setError("name", "Ingresa tu nombre.");
+    valid = false;
+  } else if (!nameRegex.test(nameEl.value.trim())) {
+    setError("name", "Solo letras y espacios.");
     valid = false;
   } else {
     setError("name", "");
@@ -47,6 +70,9 @@ function validate() {
 
   if (!birthEl.value) {
     setError("birthdate", "Selecciona tu fecha de nacimiento.");
+    valid = false;
+  } else if (isTodayOrLaterStr(birthEl.value)) {
+    setError("birthdate", "La fecha debe ser anterior a hoy.");
     valid = false;
   } else {
     setError("birthdate", "");
@@ -84,14 +110,70 @@ function focusFirstInvalid() {
   }
 }
 
-(function setTodayMax() {
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, "0");
-  const dd = String(today.getDate()).padStart(2, "0");
-  birthEl.max = `${yyyy}-${mm}-${dd}`;
+(function setMaxBirthYesterday() {
+  birthEl.max = yesterdayStr();
 })();
 
+function cleanNameChunk(s) {
+  return (s || '').replace(/[^\p{L}\s]/gu, '');
+}
+
+nameEl.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+  if (
+    e.key === 'Backspace' || e.key === 'Delete' ||
+    e.key === 'ArrowLeft' || e.key === 'ArrowRight' ||
+    e.key === 'ArrowUp'   || e.key === 'ArrowDown' ||
+    e.key === 'Tab' || e.key === 'Home' || e.key === 'End' ||
+    e.key === 'Enter'
+  ) return;
+
+  if (e.key.length === 1 && !nameChar.test(e.key)) {
+    e.preventDefault();
+  }
+});
+
+nameEl.addEventListener('beforeinput', (e) => {
+  if (!e.inputType || !e.inputType.startsWith('insert')) return;
+
+  const data = e.data ?? '';
+  if ([...data].some(ch => !nameChar.test(ch))) {
+    e.preventDefault();
+    const clean = cleanNameChunk(data);
+    if (clean) {
+      const start = nameEl.selectionStart;
+      const end   = nameEl.selectionEnd;
+      nameEl.setRangeText(clean, start, end, 'end');
+    }
+  }
+});
+
+nameEl.addEventListener('paste', (e) => {
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData('text');
+  const clean = cleanNameChunk(text);
+  const start = nameEl.selectionStart;
+  const end   = nameEl.selectionEnd;
+  nameEl.setRangeText(clean, start, end, 'end');
+});
+
+nameEl.addEventListener('compositionend', () => {
+  const caret = nameEl.selectionStart;
+  const before = nameEl.value;
+  const cleaned = cleanNameChunk(before);
+  if (before !== cleaned) {
+    nameEl.value = cleaned;
+    nameEl.setSelectionRange(caret, caret);
+  }
+});
+
+nameEl.addEventListener("blur", () => {
+  const val = nameEl.value.trim();
+  if (!val) setError("name", "Ingresa tu nombre.");
+  else if (!nameRegex.test(val)) setError("name", "Solo letras y espacios.");
+  else setError("name", "");
+});
 
 rutEl.addEventListener("input", () => {
   const oldVal = rutEl.value;
@@ -108,12 +190,6 @@ rutEl.addEventListener("input", () => {
   if (next) setError("rut", "");
 });
 
-nameEl.addEventListener("input", () => {
-  const valid = nameEl.value.trim();
-  if (!valid) setError("name", "Ingresa tu nombre.");
-  else setError("name", "");
-});
-
 rutEl.addEventListener("blur", () => {
   const valid = rutEl.value.trim();
   if (!valid) {
@@ -125,10 +201,20 @@ rutEl.addEventListener("blur", () => {
   }
 });
 
-birthEl.addEventListener("change", () => {
-  if (!birthEl.value) setError("birthdate", "Selecciona tu fecha de nacimiento.");
-  else setError("birthdate", "");
-});
+function validateBirthInline() {
+  const v = birthEl.value;
+  if (!v) {
+    setError("birthdate", "Selecciona tu fecha de nacimiento.");
+  } else if (isTodayOrLaterStr(v)) {
+    setError("birthdate", "La fecha debe ser anterior a la de hoy.");
+  } else {
+    setError("birthdate", "");
+  }
+}
+
+birthEl.addEventListener("change", validateBirthInline);
+
+birthEl.addEventListener("input", validateBirthInline);
 
 phoneEl.addEventListener("input", () => {
   const valid = phoneEl.value.trim();
