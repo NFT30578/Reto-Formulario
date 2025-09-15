@@ -75,3 +75,22 @@ Súbelo, muéstralo y motiva a otros a unirse al Club Informático 🚀.
 💡 **Tip:** No existe una única forma de resolver el reto. Sé creativo y atrévete a innovar.  
 
 ---
+
+## 🏆 Ranking
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://mnsalas.cl">
+        <img src="https://avatars.githubusercontent.com/u/42161973?v=4" width="140" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">Matias N. Salas <img src="https://rawcdn.githack.com/twitter/twemoji/v14.0.2/assets/svg/1f1e8-1f1f1.svg" width="16" /></td>
+  </tr>
+  <tr>
+     <td align="center">🥇</td>
+  </tr>
+
+</table>
