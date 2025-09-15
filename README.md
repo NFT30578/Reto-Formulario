@@ -90,7 +90,8 @@ Súbelo, muéstralo y motiva a otros a unirse al Club Informático 🚀.
     <td align="center">Matias N. Salas <img src="https://rawcdn.githack.com/twitter/twemoji/v14.0.2/assets/svg/1f1e8-1f1f1.svg" width="16" /></td>
   </tr>
   <tr>
-     <td align="center">🥇</td>
+     <td align="center">
+     <img src="https://twemoji.maxcdn.com/v/latest/svg/1f947.svg" width="64" alt="Medalla de oro" />
+     </td>
   </tr>
-
 </table>
