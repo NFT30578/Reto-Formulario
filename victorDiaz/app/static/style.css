@@ -1,0 +1,10 @@
+body{
+  background-color: blue;
+  flex-direction: column;
+  flex-flow: column;
+  width: 50%;
+}
+
+button{
+ color: red;
+}
