@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 
-<head>
-  <link rel="stylesheet" href="../static/style.css">
-</head>
+<html lang="en">
 
-<body>
-  <div>
-    <form class="form">
-     <input placeholder="Nombre Completo.">
-     <input placeholder="R.U.T.">
-     <input placeholder="Seleccionar fecha." readonly>
-     <button>Enviar</button>
-    </form>
-  </div>
+  <head>
+    <title>FLASK</title>
+    <meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/style.css">
+  </head>
 
-  <link  href="../static/script.js">
-</body>
+  <body>
+
+    <div class="div">
+
+      <p>formulario</p>
+
+      <form id="form">
+      <input id="nombre" placeholder="Nombre Completo.">
+      <input id="rut" placeholder="R.U.T.">
+      <input id="fecha" placeholder="Seleccionar fecha." readonly>
+      <button type="submit">Enviar</button>
+      </form>
+
+    </div>
+
+    <script  src="../static/script.js"></script>
+
+  </body>
+
+</html>

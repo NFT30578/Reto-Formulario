@@ -1,10 +1,15 @@
 body{
-  background-color: blue;
-  flex-direction: column;
-  flex-flow: column;
-  width: 50%;
+  min-height: 740px;
+  min-width: 360px;
 }
 
-button{
- color: red;
+.div{
+background-color: red;
+min-width: 90%;
+border: 2px solid black;
+}
+
+#form{
+  display: flex;
+  flex-direction: column;
 }
