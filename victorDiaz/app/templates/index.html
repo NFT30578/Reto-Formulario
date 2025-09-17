@@ -12,12 +12,20 @@
 
     <div class="div">
 
-      <p>formulario</p>
+      <p id="nombreFormulario">Formulario</p>
 
       <form id="form">
       <input id="nombre" placeholder="Nombre Completo.">
-      <input id="rut" placeholder="R.U.T.">
-      <input id="fecha" placeholder="Seleccionar fecha." readonly>
+      <input id="rut" placeholder="R.U.T. sin guion">
+      <span id="fono_fecha">
+        <input id="fecha" placeholder="Seleccionar fecha." readonly>
+        <button id="icono_fecha"></button>
+      </span>
+      <span id="fono_span">
+        <p id="prefijo">+56</p>
+        <input id="telefono" placeholder="Numero telefonico">
+      </span>
+      <input id="email" placeholder="e-mail">
       <button type="submit">Enviar</button>
       </form>
 
